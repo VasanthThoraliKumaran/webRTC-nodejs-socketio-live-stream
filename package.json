@@ -1,0 +1,11 @@
+{
+  "name": "webrtc-nodejs-socketio",
+  "version": "1.0.0",
+  "description": "webRTC using nodejs-socketio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "VasanthThorazhiKumaran",
+  "license": "ISC"
+}
