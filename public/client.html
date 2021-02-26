@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.1/socket.io.min.js"></script>
+    <script src="./simplepeer.min.js"></script>
+    <script src="./client.js"></script>
+
+    <title>WebRTC-Demo</title>
+</head>
+<body>
+    <div class="connection-window">
+        <input type="text" id="txt" size="40">
+        <button id="send">Send</button>
+
+        <p id="response"></p>
+    </div>
+</body>
+<script>
+    
+var socket = io.connect('http://localhost:4000');
+
+var peerConnection = new SimplePeer({
+      initiator:location.hash === '#host',
+    });
+
+var btn = document.getElementById('send'),
+    response = document.getElementById('response');
+    txtbox = document.getElementById('txt');
+
+btn.addEventListener('click', ()=>{
+    const data = txtbox.value;
+    peerConnection.send(data);
+})
+
+socket.emit('establishConnection', socket.id);
+
+peerConnection.on('error', err => console.log('error', err))
+
+peerConnection.on("signal", (data) => {
+        const sdp = JSON.stringify(data);
+        console.log('sdp is ',sdp);
+        socket.emit('offer', sdp);
+  });
+
+  socket.on('answer',(sdp)=>{
+        peerConnection.signal(sdp);
+  })
+
+  socket.on('response', data=>{
+        response.innerHTML = data;
+  });
+  
+peerConnection.on('connect',()=>{
+    console.log('connection established in browser');
+});
+
+peerConnection.on('data', data => {
+        console.log('data: ' + data)
+ })
+</script>
+</html>
