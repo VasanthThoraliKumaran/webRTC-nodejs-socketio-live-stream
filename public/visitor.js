@@ -19,29 +19,40 @@ socketConnection.on('answer', (sdp) => {
     peerConnection.signal(sdp);
 })
 
-
-socketConnection.on('responseMessage', data => {
-    $responseMessage.innerHTML = data;
-});
-
 //event listeners for simple-peer
 
 peerConnection.on('error', err => console.log('error', err))
 
 peerConnection.on("signal", (data) => {
+    /*
+it is an entry point, visitor will get his offer from simple-peer
+and passes that to host using socket emit('offer').
+    */
     const sdp = JSON.stringify(data);
+    //emitting offer to server
     socketConnection.emit('offer', sdp);
 });
 
 peerConnection.on('connect', () => {
+    /*
+        it gets executed when connection between visitor
+        and host was successfully established.
+    */
     alert('connection established in browser');
 });
 
 peerConnection.on('data', data => {
-    console.log('data: ' + data);
+    /*
+     it gets executed when host
+     sends a response message.
+     */
+    console.log('data from host: ' + data);
+    $responseMessage.innerHTML = data;
 });
 
 peerConnection.on('close', () => {
+
+    //disconnects socket connection
     socketConnection.emit('disconnect');
     console.log('socket disconnected at browser');
     socketConnection.disconnect();
