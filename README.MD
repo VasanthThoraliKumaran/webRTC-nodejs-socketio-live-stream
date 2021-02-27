@@ -1,4 +1,5 @@
-#WebRTC Connection Establishment Using nodejs & socketio as middleman
-- Uses nodejs server as peer A
-- Any other connection as peer B
-- Both make a inital handshake and then communicates
+#WebRTC Connection Establishment Using nodejs & socketio as middleman.
+- Uses nodejs server as host.
+- Any other connection (i.e browser) as visitor.
+- Both make a inital handshake and then starts communication.
+- Exchanges data between them.
