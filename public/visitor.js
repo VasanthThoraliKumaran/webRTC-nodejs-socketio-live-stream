@@ -1,7 +1,7 @@
 let socketConnection = io.connect('http://localhost:4000');
 
 let peerConnection = new SimplePeer({
-    initiator: location.hash === '#host',
+    initiator: location.hash === '#visitor',
 });
 
 let $sendButton = document.getElementById('send'),
