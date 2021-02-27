@@ -25,8 +25,8 @@ peerConnection.on('error', err => console.log('error', err))
 
 peerConnection.on("signal", (data) => {
     /*
-it is an entry point, visitor will get his offer from simple-peer
-and passes that to host using socket emit('offer').
+    it is an entry point, visitor will get his offer from simple-peer
+    and passes that to host using socket emit('offer').
     */
     const sdp = JSON.stringify(data);
     //emitting offer to server
@@ -35,8 +35,8 @@ and passes that to host using socket emit('offer').
 
 peerConnection.on('connect', () => {
     /*
-        it gets executed when connection between visitor
-        and host was successfully established.
+    it gets executed when connection between visitor
+    and host was successfully established.
     */
     alert('connection established in browser');
 });

@@ -22,8 +22,7 @@ io.on('connection', (socket) => {
   //event listeners for socketio
   socket.on('offer', sdp => {
     /*
-      host receives offer from visitor and si
-      
+    host receives offer from visitor and signals it.
     */
     peerConnection.signal(sdp);
   });
@@ -40,8 +39,8 @@ io.on('connection', (socket) => {
 
   peerConnection.on("signal", (data) => {
     /*
-        host prepares answer for the received offer and
-        sends back to the visitor using socket emit('answer).
+    host prepares answer for the received offer and
+    sends back to the visitor using socket emit('answer).
     */
     const sdp = JSON.stringify(data);
     socket.emit('answer', sdp);
@@ -49,9 +48,9 @@ io.on('connection', (socket) => {
 
   peerConnection.on('connect', () => {
     /*
-       it gets executed when connection between visitor
-       and host was successfully established.
-   */
+    it gets executed when connection between visitor
+    and host was successfully established.
+    */
     console.log('connection established in node');
   });
 
