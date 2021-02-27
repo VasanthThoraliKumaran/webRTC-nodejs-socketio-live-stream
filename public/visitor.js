@@ -53,7 +53,7 @@ peerConnection.on('data', data => {
 peerConnection.on('close', () => {
 
     //disconnects socket connection
-    socketConnection.emit('disconnect');
+    socketConnection.emit('disconnection');
     console.log('socket disconnected at browser');
     socketConnection.disconnect();
 }); 
