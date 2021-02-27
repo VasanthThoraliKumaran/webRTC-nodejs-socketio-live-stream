@@ -1,42 +1,54 @@
-var express = require('express');
-var simplepeer = require('simple-peer');
-var socket = require('socket.io');
-var wrtc = require('wrtc')
-var app = express();
-let port = 4000;
+let express = require('express');
+let simplePeer = require('simple-peer');
+let socket = require('socket.io');
+let nodeWebrtc = require('wrtc');
+let app = express();
+const PORT = 4000;
 
 app.use(express.static('public'));
 
-var server = app.listen(port,()=>{
-    console.log(`server running on port ${port}`);
+let server = app.listen(PORT, () => {
+  console.log(`server running on PORT ${PORT}`);
 });
 
-var io = socket(server);
-const peerConnection = new simplepeer({wrtc:wrtc});
+let io = socket(server);
+let peerConnection = new simplePeer({ wrtc: nodeWebrtc });
 
 //on socket connection opened
-io.on('connection', (socket)=>{
+io.on('connection', (socket) => {
 
-    console.log('New Socket has opened ', socket.id);
+  console.log('New Socket has opened ', socket.id);
 
-    peerConnection.on('error', err => console.log('error', err))
+  //event listeners for socketio
+  socket.on('offer', sdp => {
+    peerConnection.signal(sdp);
+  });
 
-    peerConnection.on("signal", (data) => {
-            const sdp = JSON.stringify(data);
-            socket.emit('answer', sdp);
-      });
+  socket.on('disconnect', () => {
+    console.log('socket disconnected at node server');
+    socket.disconnect();
+  });
 
-      socket.on('offer', sdp=>{
-       peerConnection.signal(sdp);
-      })
 
-    peerConnection.on('connect',()=>{
-      console.log('connection established in node');
-    });
-    
-    peerConnection.on('data', data => {
-            console.log('data from host: ' + data);
-            socket.emit('response', "responding for "+ data);
-     })
+  //event listeners for simple-peer
+  peerConnection.on('error', err => console.log('error', err));
+
+  peerConnection.on("signal", (data) => {
+    const sdp = JSON.stringify(data);
+    socket.emit('answer', sdp);
+  });
+
+  peerConnection.on('connect', () => {
+    console.log('connection established in node');
+  });
+
+  peerConnection.on('data', data => {
+    console.log('data from host: ' + data);
+    socket.emit('responseMessage', "responding for " + data);
+  });
+
+  peerConnection.on('close', () => {
+    console.log('connection has been closed');
+  });
 });
 
