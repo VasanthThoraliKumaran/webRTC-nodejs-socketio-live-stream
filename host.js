@@ -28,7 +28,7 @@ io.on('connection', (socket) => {
     peerConnection.signal(sdp);
   });
 
-  socket.on('disconnect', () => {
+  socket.on('disconnection', () => {
     //disconnects socket connection
     console.log('socket disconnected at node server');
     socket.disconnect();
